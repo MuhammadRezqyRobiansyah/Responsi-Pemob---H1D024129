@@ -18,13 +18,7 @@ Aplikasi ini mengintegrasikan data publik dari **TVmaze REST API** untuk menampi
 ## 2. Screenshot & Demo Aplikasi
 
 | Home Screen (Grid Film) | Detail Screen (Informasi & Sinopsis) | Pencarian & State Feedback |
-| :---: | :---: | :---: |
-| ![Home Screen](<img width="720" height="1600" alt="pemob r 2" src="https://github.com/user-attachments/assets/e5eb6bd8-52ad-41f5-9b20-179059c4bb33" />
-) | ![Detail Screen](<img width="720" height="1600" alt="pemob r 1" src="https://github.com/user-attachments/assets/159d5585-cccf-4491-9c3e-f98a1cfa7ae6" />
-) | ![Search Screen](<img width="720" height="1600" alt="pemob r 3" src="https://github.com/user-attachments/assets/272b5072-5c58-4629-8f05-c4e74cd5ecb5" />
-) |
-
-> *(Catatan: Gambar screenshot dapat diletakkan di folder `docs/screenshots/`)*
+| <img src="https://github.com/user-attachments/assets/e5eb6bd8-52ad-41f5-9b20-179059c4bb33" width="260" alt="Home Screen" /> | <img src="https://github.com/user-attachments/assets/159d5585-cccf-4491-9c3e-f98a1cfa7ae6" width="260" alt="Detail Screen" /> | <img src="https://github.com/user-attachments/assets/272b5072-5c58-4629-8f05-c4e74cd5ecb5" width="260" alt="Search Screen" /> |
 
 ---
 
@@ -35,7 +29,7 @@ Aplikasi ini mengintegrasikan data publik dari **TVmaze REST API** untuk menampi
 - **Layar Detail Komprehensif:** Menampilkan poster film, judul, tahun rilis, skor rating (bintang), chip genre tayangan, dan sinopsis lengkap yang otomatis dibersihkan dari tag format HTML.
 - **Navigasi Mulus & State Preservation:** Menggunakan Navigation Compose dengan pemindahan argumen dinamis (`detail/{showId}`) di mana hasil pencarian di Home Screen tetap terjaga saat pengguna kembali dari halaman detail.
 - **State-Driven UI & Feedback Lengkap:** Menangani berbagai kondisi antarmuka secara elegan: *Loading Indicator*, *Empty State* (jika film tidak ditemukan), *Error State* (dengan tombol Coba Lagi / Retry), dan *Success State*.
-- **Desain Khusus Cinema Aesthetic:** Menerapkan Material Design 3 dengan palet warna custom (*Cinema Red* `#E50914`, *Cinema Gold* `#FFB800`, dan kontras gelap modern).
+- **Desain Khusus Dark Emerald Glassmorphism:** Menerapkan Material Design 3 dengan tema gelap elegan (*Obsidian Dark* `#0C1311`, *Emerald Surface* `#14221D`, glowing border halus, badge rating emas, dan chip kategori yang interaktif).
 
 ---
 
@@ -153,7 +147,7 @@ Aplikasi ini menggunakan **TVmaze Public API** ([https://www.tvmaze.com/api](htt
 
 1. **Clone Repositori:**
    ```bash
-   git clone <URL_REPOSITORY_ANDA>
+   git clone https://github.com/MuhammadRezqyRobiansyah/Responsi-Pemob---H1D024129.git
    ```
 2. **Buka Proyek:**
    * Buka aplikasi **Android Studio**.
