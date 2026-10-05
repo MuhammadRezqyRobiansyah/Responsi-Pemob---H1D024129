@@ -4,7 +4,7 @@
 > **Nama:** Muhammad Rezqy Robiansyah  
 > **NIM:** H1D024129  
 > **Program Studi:** Informatika  
-> **Link Video Presentasi:** [Tonton Video Demo & Penjelasan Kode](LINK_VIDEO_YOUTUBE_ATAU_DRIVE_DISINI)
+> **Link Video Presentasi:** [Tonton Video Demo & Penjelasan Kode](https://drive.google.com/drive/folders/1cCJOR8hE_-WOQAAOIfV1yo9r-LF3CTOI?usp=sharing)
 
 ---
 
@@ -19,7 +19,7 @@ Aplikasi ini mengintegrasikan data publik dari **TVmaze REST API** untuk menampi
 ## 2. Demo Video & Screenshot Aplikasi
 
 ### 🎥 Video Demo & Code Walkthrough
-▶️ **Link Video:** [Klik di sini untuk menonton Video Demo & Penjelasan Kode di YouTube / Google Drive](LINK_VIDEO_YOUTUBE_ATAU_DRIVE_DISINI)
+▶️ **Link Video:** [Klik di sini untuk menonton Video Demo & Penjelasan Kode di Google Drive](https://drive.google.com/drive/folders/1cCJOR8hE_-WOQAAOIfV1yo9r-LF3CTOI?usp=sharing)
 
 *(Pastikan video diset ke **Unlisted / Public** di YouTube atau **Anyone with the link can view** di Google Drive)*
 
