@@ -20,7 +20,9 @@ Aplikasi ini mengintegrasikan data publik dari **TVmaze REST API** untuk menampi
 | Home Screen (Grid Film) | Detail Screen (Informasi & Sinopsis) | Pencarian & State Feedback |
 | :---: | :---: | :---: |
 | ![Home Screen](<img width="720" height="1600" alt="pemob r 2" src="https://github.com/user-attachments/assets/e5eb6bd8-52ad-41f5-9b20-179059c4bb33" />
-) | ![Detail Screen](docs/screenshots/detail_screen.png) | ![Search Screen](docs/screenshots/search_screen.png) |
+) | ![Detail Screen](<img width="720" height="1600" alt="pemob r 1" src="https://github.com/user-attachments/assets/159d5585-cccf-4491-9c3e-f98a1cfa7ae6" />
+) | ![Search Screen](<img width="720" height="1600" alt="pemob r 3" src="https://github.com/user-attachments/assets/272b5072-5c58-4629-8f05-c4e74cd5ecb5" />
+) |
 
 > *(Catatan: Gambar screenshot dapat diletakkan di folder `docs/screenshots/`)*
 
