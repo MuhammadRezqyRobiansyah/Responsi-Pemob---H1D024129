@@ -12,4 +12,5 @@
 /app/build
 build/
 local.properties
-
+*.pdf
+Responsi Mobile A.pdf
