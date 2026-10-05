@@ -1,0 +1,3 @@
+com.film.robiansyah
+string app_name
+style Theme_CineExplore
