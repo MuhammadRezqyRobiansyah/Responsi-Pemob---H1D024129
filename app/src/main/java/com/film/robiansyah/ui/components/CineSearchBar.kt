@@ -14,13 +14,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
-import com.film.robiansyah.ui.theme.NeoBorder
-import com.film.robiansyah.ui.theme.NeoLime
-import com.film.robiansyah.ui.theme.NeoSurface
-import com.film.robiansyah.ui.theme.NeoTextWhite
+import com.film.robiansyah.ui.theme.*
 
 @Composable
 fun CineSearchBar(
@@ -38,14 +34,14 @@ fun CineSearchBar(
         placeholder = {
             Text(
                 text = "Cari judul film atau serial TV...",
-                color = Color.Gray
+                color = TextMuted
             )
         },
         leadingIcon = {
             Icon(
                 imageVector = Icons.Default.Search,
                 contentDescription = "Search Icon",
-                tint = NeoLime // Aksen kuning-hijau elektrik khas Neo-Brutalism
+                tint = EmeraldPrimary
             )
         },
         trailingIcon = {
@@ -57,13 +53,13 @@ fun CineSearchBar(
                     Icon(
                         imageVector = Icons.Default.Clear,
                         contentDescription = "Hapus Pencarian",
-                        tint = Color.White
+                        tint = TextSecondary
                     )
                 }
             }
         },
         singleLine = true,
-        shape = RoundedCornerShape(8.dp), // Sudut tegas khas Neo-Brutalism
+        shape = RoundedCornerShape(14.dp),
         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
         keyboardActions = KeyboardActions(
             onSearch = {
@@ -72,16 +68,16 @@ fun CineSearchBar(
             }
         ),
         colors = OutlinedTextFieldDefaults.colors(
-            focusedBorderColor = NeoLime,
-            unfocusedBorderColor = NeoBorder,
-            focusedContainerColor = NeoSurface,
-            unfocusedContainerColor = NeoSurface,
-            focusedTextColor = NeoTextWhite,
-            unfocusedTextColor = NeoTextWhite
+            focusedBorderColor = EmeraldPrimary,
+            unfocusedBorderColor = EmeraldBorder,
+            focusedContainerColor = DarkSurfaceGlass,
+            unfocusedContainerColor = DarkSurfaceGlass,
+            focusedTextColor = TextPrimary,
+            unfocusedTextColor = TextPrimary
         ),
         modifier = modifier
             .fillMaxWidth()
-            .padding(horizontal = 16.dp, vertical = 8.dp)
-            .border(2.dp, NeoBorder, RoundedCornerShape(8.dp)) // Border tegas 2.dp
+            .padding(horizontal = 16.dp, vertical = 6.dp)
+            .border(1.dp, EmeraldBorder, RoundedCornerShape(14.dp))
     )
 }

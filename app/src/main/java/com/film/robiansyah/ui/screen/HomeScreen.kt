@@ -1,15 +1,16 @@
 package com.film.robiansyah.ui.screen
 
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ErrorOutline
+import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Movie
 import androidx.compose.material.icons.filled.SearchOff
 import androidx.compose.material3.*
@@ -31,6 +32,7 @@ import com.film.robiansyah.ui.components.ShowItemCard
 import com.film.robiansyah.ui.theme.*
 import com.film.robiansyah.ui.viewmodel.SearchUiState
 import com.film.robiansyah.ui.viewmodel.TvShowViewModel
+import com.film.robiansyah.util.TvMazeConstants.DEFAULT_SEARCH_QUERY
 
 // STATEFUL COMPOSABLE (Menangani ViewModel & Navigasi)
 @Composable
@@ -46,6 +48,14 @@ fun HomeScreen(
         onQueryChange = { viewModel.onSearchQueryChanged(it) },
         onSearch = { viewModel.searchShows() },
         onClearSearch = { viewModel.clearSearch() },
+        onResetToDefault = {
+            viewModel.onSearchQueryChanged(DEFAULT_SEARCH_QUERY)
+            viewModel.searchShows(DEFAULT_SEARCH_QUERY)
+        },
+        onQuickCategoryClick = { category ->
+            viewModel.onSearchQueryChanged(category)
+            viewModel.searchShows(category)
+        },
         uiState = searchUiState,
         onShowClick = { show ->
             navController.navigate("detail/${show.id}")
@@ -54,7 +64,7 @@ fun HomeScreen(
     )
 }
 
-// STATELESS COMPOSABLE (Tampilan Murni Neo-Brutalism Dark)
+// STATELESS COMPOSABLE (Tampilan Murni Dark Emerald Glassmorphism)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun StatelessHomeScreen(
@@ -62,61 +72,67 @@ fun StatelessHomeScreen(
     onQueryChange: (String) -> Unit,
     onSearch: () -> Unit,
     onClearSearch: () -> Unit,
+    onResetToDefault: () -> Unit,
+    onQuickCategoryClick: (String) -> Unit,
     uiState: SearchUiState,
     onShowClick: (Show) -> Unit,
     onRetry: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val quickCategories = listOf("Marvel", "Action", "Drama", "Anime", "Comedy", "Sci-Fi", "Batman")
+
     Scaffold(
         topBar = {
             TopAppBar(
                 title = {
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                        modifier = Modifier.fillMaxWidth().padding(end = 16.dp)
-                    ) {
-                        Row(verticalAlignment = Alignment.CenterVertically) {
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Surface(
+                            color = Color(0x3310B981),
+                            shape = RoundedCornerShape(10.dp),
+                            border = BorderStroke(1.dp, EmeraldBorder)
+                        ) {
                             Icon(
                                 imageVector = Icons.Default.Movie,
                                 contentDescription = "Logo",
-                                tint = NeoLime,
-                                modifier = Modifier.size(28.dp)
-                            )
-                            Spacer(modifier = Modifier.width(8.dp))
-                            Text(
-                                text = "CINE.EXPLORE",
-                                style = MaterialTheme.typography.titleLarge.copy(
-                                    letterSpacing = 1.sp
-                                ),
-                                fontWeight = FontWeight.Black,
-                                color = NeoTextWhite
+                                tint = EmeraldPrimary,
+                                modifier = Modifier
+                                    .padding(6.dp)
+                                    .size(24.dp)
                             )
                         }
-
-                        // Badge Tag Khas Neo-Brutalism
-                        Surface(
-                            color = NeoLime,
-                            shape = RoundedCornerShape(4.dp),
-                            border = BorderStroke(1.5.dp, Color.Black)
-                        ) {
+                        Spacer(modifier = Modifier.width(10.dp))
+                        Column {
                             Text(
-                                text = "TVMAZE",
+                                text = "CineExplore",
+                                style = MaterialTheme.typography.titleLarge,
+                                fontWeight = FontWeight.Bold,
+                                color = TextPrimary
+                            )
+                            Text(
+                                text = "TVmaze API Explorer",
                                 style = MaterialTheme.typography.labelSmall,
-                                fontWeight = FontWeight.Black,
-                                color = Color.Black,
-                                modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp)
+                                color = EmeraldPrimary
                             )
                         }
                     }
                 },
+                actions = {
+                    // Tombol Reset ke Beranda / Rekomendasi Awal
+                    IconButton(onClick = onResetToDefault) {
+                        Icon(
+                            imageVector = Icons.Default.Home,
+                            contentDescription = "Reset Beranda",
+                            tint = EmeraldPrimary
+                        )
+                    }
+                },
                 colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = NeoBackground,
-                    titleContentColor = NeoTextWhite
+                    containerColor = DarkBg,
+                    titleContentColor = TextPrimary
                 )
             )
         },
-        containerColor = NeoBackground,
+        containerColor = DarkBg,
         modifier = modifier
     ) { paddingValues ->
         Column(
@@ -124,7 +140,7 @@ fun StatelessHomeScreen(
                 .fillMaxSize()
                 .padding(paddingValues)
         ) {
-            // Kolom Pencarian Film
+            // 1. Kolom Pencarian Film Glassmorphic
             CineSearchBar(
                 query = searchQuery,
                 onQueryChange = onQueryChange,
@@ -132,7 +148,31 @@ fun StatelessHomeScreen(
                 onClear = onClearSearch
             )
 
-            // Status Rendering berdasarkan StateFlow UI State
+            // 2. Chips Kategori Cepat (Colorful & Mudah Diuji)
+            LazyRow(
+                contentPadding = PaddingValues(horizontal = 16.dp, vertical = 6.dp),
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                items(quickCategories) { category ->
+                    val isSelected = searchQuery.equals(category, ignoreCase = true)
+                    Surface(
+                        onClick = { onQuickCategoryClick(category) },
+                        shape = RoundedCornerShape(20.dp),
+                        color = if (isSelected) EmeraldPrimary else DarkSurfaceCard,
+                        border = BorderStroke(1.dp, if (isSelected) EmeraldPrimary else EmeraldBorder)
+                    ) {
+                        Text(
+                            text = category,
+                            style = MaterialTheme.typography.labelMedium,
+                            fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Medium,
+                            color = if (isSelected) Color.Black else TextSecondary,
+                            modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp)
+                        )
+                    }
+                }
+            }
+
+            // 3. Status Rendering berdasarkan StateFlow UI State
             when (uiState) {
                 is SearchUiState.Loading -> {
                     Box(
@@ -141,15 +181,14 @@ fun StatelessHomeScreen(
                     ) {
                         Column(horizontalAlignment = Alignment.CenterHorizontally) {
                             CircularProgressIndicator(
-                                color = NeoLime,
+                                color = EmeraldPrimary,
                                 strokeWidth = 3.dp
                             )
-                            Spacer(modifier = Modifier.height(12.dp))
+                            Spacer(modifier = Modifier.height(14.dp))
                             Text(
-                                text = "Mencari film di TVmaze...",
+                                text = "Menghubungkan ke TVmaze API...",
                                 style = MaterialTheme.typography.bodyMedium,
-                                color = NeoTextWhite,
-                                fontWeight = FontWeight.SemiBold
+                                color = TextSecondary
                             )
                         }
                     }
@@ -183,19 +222,18 @@ fun StatelessHomeScreen(
                         contentAlignment = Alignment.Center
                     ) {
                         Card(
-                            colors = CardDefaults.cardColors(containerColor = NeoSurface),
-                            border = BorderStroke(2.dp, NeoBorder),
-                            shape = RoundedCornerShape(8.dp),
-                            modifier = Modifier.padding(16.dp)
+                            colors = CardDefaults.cardColors(containerColor = DarkSurfaceCard),
+                            border = BorderStroke(1.dp, EmeraldBorder),
+                            shape = RoundedCornerShape(16.dp)
                         ) {
                             Column(
                                 horizontalAlignment = Alignment.CenterHorizontally,
-                                modifier = Modifier.padding(24.dp)
+                                modifier = Modifier.padding(28.dp)
                             ) {
                                 Icon(
                                     imageVector = Icons.Default.SearchOff,
                                     contentDescription = "Tidak Ditemukan",
-                                    tint = NeoCoral,
+                                    tint = AccentRose,
                                     modifier = Modifier.size(56.dp)
                                 )
                                 Spacer(modifier = Modifier.height(12.dp))
@@ -203,13 +241,13 @@ fun StatelessHomeScreen(
                                     text = "Film Tidak Ditemukan",
                                     style = MaterialTheme.typography.titleMedium,
                                     fontWeight = FontWeight.Bold,
-                                    color = NeoTextWhite
+                                    color = TextPrimary
                                 )
                                 Spacer(modifier = Modifier.height(4.dp))
                                 Text(
-                                    text = "Coba gunakan kata kunci judul film lain.",
+                                    text = "Coba gunakan kata kunci atau pilih kategori cepat di atas.",
                                     style = MaterialTheme.typography.bodyMedium,
-                                    color = NeoTextMuted,
+                                    color = TextSecondary,
                                     textAlign = TextAlign.Center
                                 )
                             }
@@ -225,19 +263,18 @@ fun StatelessHomeScreen(
                         contentAlignment = Alignment.Center
                     ) {
                         Card(
-                            colors = CardDefaults.cardColors(containerColor = NeoSurface),
-                            border = BorderStroke(2.dp, NeoCoral),
-                            shape = RoundedCornerShape(8.dp),
-                            modifier = Modifier.padding(16.dp)
+                            colors = CardDefaults.cardColors(containerColor = DarkSurfaceCard),
+                            border = BorderStroke(1.dp, AccentRose.copy(alpha = 0.5f)),
+                            shape = RoundedCornerShape(16.dp)
                         ) {
                             Column(
                                 horizontalAlignment = Alignment.CenterHorizontally,
-                                modifier = Modifier.padding(24.dp)
+                                modifier = Modifier.padding(28.dp)
                             ) {
                                 Icon(
                                     imageVector = Icons.Default.ErrorOutline,
                                     contentDescription = "Error",
-                                    tint = NeoCoral,
+                                    tint = AccentRose,
                                     modifier = Modifier.size(56.dp)
                                 )
                                 Spacer(modifier = Modifier.height(12.dp))
@@ -245,29 +282,25 @@ fun StatelessHomeScreen(
                                     text = "Gagal Memuat Data",
                                     style = MaterialTheme.typography.titleMedium,
                                     fontWeight = FontWeight.Bold,
-                                    color = NeoCoral
+                                    color = AccentRose
                                 )
                                 Spacer(modifier = Modifier.height(6.dp))
                                 Text(
                                     text = uiState.message,
                                     style = MaterialTheme.typography.bodyMedium,
-                                    color = NeoTextWhite,
+                                    color = TextSecondary,
                                     textAlign = TextAlign.Center
                                 )
                                 Spacer(modifier = Modifier.height(16.dp))
                                 Button(
                                     onClick = onRetry,
                                     colors = ButtonDefaults.buttonColors(
-                                        containerColor = NeoLime,
+                                        containerColor = EmeraldPrimary,
                                         contentColor = Color.Black
                                     ),
-                                    shape = RoundedCornerShape(6.dp),
-                                    border = BorderStroke(2.dp, Color.Black)
+                                    shape = RoundedCornerShape(10.dp)
                                 ) {
-                                    Text(
-                                        text = "Coba Lagi",
-                                        fontWeight = FontWeight.Bold
-                                    )
+                                    Text("Coba Lagi", fontWeight = FontWeight.Bold)
                                 }
                             }
                         }
@@ -285,21 +318,21 @@ fun StatelessHomeScreen(
                             Icon(
                                 imageVector = Icons.Default.Movie,
                                 contentDescription = "Idle",
-                                tint = NeoLime,
+                                tint = EmeraldPrimary.copy(alpha = 0.6f),
                                 modifier = Modifier.size(64.dp)
                             )
                             Spacer(modifier = Modifier.height(16.dp))
                             Text(
-                                text = "Mulai Pencarian",
+                                text = "Mulai Menjelajah",
                                 style = MaterialTheme.typography.titleMedium,
                                 fontWeight = FontWeight.Bold,
-                                color = NeoTextWhite
+                                color = TextPrimary
                             )
                             Spacer(modifier = Modifier.height(4.dp))
                             Text(
-                                text = "Ketik judul film atau serial TV di atas lalu tekan cari.",
+                                text = "Ketik judul film atau pilih kategori cepat di atas.",
                                 style = MaterialTheme.typography.bodyMedium,
-                                color = NeoTextMuted,
+                                color = TextSecondary,
                                 textAlign = TextAlign.Center
                             )
                         }

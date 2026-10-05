@@ -2,7 +2,6 @@ package com.film.robiansyah.ui.components
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -14,6 +13,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
@@ -33,13 +33,14 @@ fun ShowItemCard(
     Card(
         modifier = modifier
             .fillMaxWidth()
-            .clip(RoundedCornerShape(8.dp))
+            .clip(RoundedCornerShape(14.dp))
             .clickable(onClick = onClick),
-        shape = RoundedCornerShape(8.dp),
-        border = BorderStroke(2.dp, NeoBorder), // Border tegas 2.dp khas Neo-Brutalism
+        shape = RoundedCornerShape(14.dp),
+        border = BorderStroke(1.dp, EmeraldBorder), // Border tipis bercahaya emerald
         colors = CardDefaults.cardColors(
-            containerColor = NeoSurface
-        )
+            containerColor = DarkSurfaceCard // Permukaan hijau zamrud gelap
+        ),
+        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
     ) {
         Column(modifier = Modifier.fillMaxWidth()) {
             // Container Gambar Poster Film / Placeholder
@@ -47,7 +48,7 @@ fun ShowItemCard(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(210.dp)
-                    .background(Color(0xFF141414)),
+                    .background(Color(0xFF0F1A16)),
                 contentAlignment = Alignment.Center
             ) {
                 val imageUrl = show.image?.medium ?: show.image?.original
@@ -60,7 +61,7 @@ fun ShowItemCard(
                         modifier = Modifier.fillMaxSize()
                     )
                 } else {
-                    // Placeholder jika gambar tidak tersedia
+                    // Fallback visual jika poster tidak tersedia dari API
                     Column(
                         horizontalAlignment = Alignment.CenterHorizontally,
                         verticalArrangement = Arrangement.Center,
@@ -69,54 +70,66 @@ fun ShowItemCard(
                         Icon(
                             imageVector = Icons.Default.Movie,
                             contentDescription = "Movie Placeholder",
-                            tint = NeoLime,
+                            tint = EmeraldPrimary.copy(alpha = 0.6f),
                             modifier = Modifier.size(44.dp)
                         )
                         Spacer(modifier = Modifier.height(8.dp))
                         Text(
                             text = show.name,
                             style = MaterialTheme.typography.bodySmall,
-                            color = NeoTextMuted,
+                            color = TextSecondary,
                             maxLines = 2,
                             overflow = TextOverflow.Ellipsis
                         )
                     }
                 }
 
-                // Badge Rating (Pojok Kiri Atas) - Gaya Neo-Brutalism Kontras Tinggi
+                // Gradient bayangan halus di bawah poster
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(60.dp)
+                        .align(Alignment.BottomCenter)
+                        .background(
+                            Brush.verticalGradient(
+                                colors = listOf(Color.Transparent, Color(0xE60C1311))
+                            )
+                        )
+                )
+
+                // Badge Rating (Bintang Emas Frosted Glass di Pojok Kiri Atas)
                 Surface(
-                    color = NeoLime,
-                    shape = RoundedCornerShape(4.dp),
-                    border = BorderStroke(1.5.dp, Color.Black),
+                    color = Color(0xB30C1311),
+                    shape = RoundedCornerShape(8.dp),
+                    border = BorderStroke(0.5.dp, Color(0x33FFFFFF)),
                     modifier = Modifier
                         .align(Alignment.TopStart)
                         .padding(8.dp)
                 ) {
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
-                        modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp)
+                        modifier = Modifier.padding(horizontal = 7.dp, vertical = 3.dp)
                     ) {
                         Icon(
                             imageVector = Icons.Default.Star,
                             contentDescription = "Rating",
-                            tint = Color.Black,
+                            tint = AccentGold,
                             modifier = Modifier.size(13.dp)
                         )
                         Spacer(modifier = Modifier.width(3.dp))
                         Text(
                             text = show.ratingText,
                             style = MaterialTheme.typography.labelSmall.copy(fontSize = 11.sp),
-                            fontWeight = FontWeight.Black,
-                            color = Color.Black
+                            fontWeight = FontWeight.Bold,
+                            color = TextPrimary
                         )
                     }
                 }
 
-                // Badge Tahun Rilis (Pojok Kanan Atas)
+                // Badge Tahun Rilis (Cyan Pill di Pojok Kanan Atas)
                 Surface(
-                    color = NeoCoral,
-                    shape = RoundedCornerShape(4.dp),
-                    border = BorderStroke(1.5.dp, Color.Black),
+                    color = Color(0xCC0369A1),
+                    shape = RoundedCornerShape(8.dp),
                     modifier = Modifier
                         .align(Alignment.TopEnd)
                         .padding(8.dp)
@@ -124,37 +137,34 @@ fun ShowItemCard(
                     Text(
                         text = show.releaseYear,
                         style = MaterialTheme.typography.labelSmall.copy(fontSize = 11.sp),
-                        fontWeight = FontWeight.Black,
+                        fontWeight = FontWeight.Bold,
                         color = Color.White,
-                        modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp)
+                        modifier = Modifier.padding(horizontal = 7.dp, vertical = 3.dp)
                     )
                 }
             }
-
-            // Garis pembatas antara gambar dan teks
-            HorizontalDivider(thickness = 2.dp, color = NeoBorder)
 
             // Informasi Judul & Genre Film
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(10.dp)
+                    .padding(12.dp)
             ) {
                 Text(
                     text = show.name,
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.Bold,
-                    color = NeoTextWhite,
+                    color = TextPrimary,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis
                 )
 
-                Spacer(modifier = Modifier.height(4.dp))
+                Spacer(modifier = Modifier.height(3.dp))
 
                 Text(
                     text = show.genresText,
                     style = MaterialTheme.typography.bodySmall,
-                    color = NeoCyan, // Aksen Cyan terang agar genre langsung terbaca
+                    color = EmeraldPrimary, // Aksen hijau emerald cerah untuk genre
                     fontWeight = FontWeight.Medium,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis

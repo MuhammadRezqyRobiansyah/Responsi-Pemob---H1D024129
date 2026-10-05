@@ -7,38 +7,35 @@ import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 
-// Skema Tema Neo-Brutalism Dark
-private val NeoDarkColorScheme = darkColorScheme(
-    primary = NeoLime,
+// Skema Tema Dark Emerald Glassmorphism
+private val EmeraldDarkColorScheme = darkColorScheme(
+    primary = EmeraldPrimary,
     onPrimary = Color.Black,
-    secondary = NeoCyan,
+    secondary = AccentCyan,
     onSecondary = Color.Black,
-    tertiary = NeoCoral,
-    onTertiary = Color.White,
-    background = NeoBackground,
-    surface = NeoSurface,
-    surfaceVariant = NeoSurfaceVariant,
-    onBackground = NeoTextWhite,
-    onSurface = NeoTextWhite,
-    onSurfaceVariant = NeoTextMuted,
-    outline = NeoBorder
+    tertiary = AccentGold,
+    background = DarkBg,
+    surface = DarkSurface,
+    surfaceVariant = DarkSurfaceCard,
+    onBackground = TextPrimary,
+    onSurface = TextPrimary,
+    onSurfaceVariant = TextSecondary,
+    outline = EmeraldBorder
 )
 
-// Opsi Terang (Tetap mengutamakan kontras tegas Neo-Brutalism)
-private val NeoLightColorScheme = lightColorScheme(
-    primary = NeoLime,
-    onPrimary = Color.Black,
-    secondary = NeoCyan,
+private val EmeraldLightColorScheme = lightColorScheme(
+    primary = EmeraldPrimary,
+    onPrimary = Color.White,
+    secondary = AccentCyan,
     onSecondary = Color.Black,
-    tertiary = NeoCoral,
-    onTertiary = Color.White,
-    background = Color(0xFFF4F4F5),
+    tertiary = AccentGold,
+    background = Color(0xFFF1F5F3),
     surface = Color.White,
-    surfaceVariant = Color(0xFFE4E4E7),
-    onBackground = Color(0xFF09090B),
-    onSurface = Color(0xFF09090B),
-    onSurfaceVariant = Color(0xFF52525B),
-    outline = Color(0xFF09090B)
+    surfaceVariant = Color(0xFFE2E8F0),
+    onBackground = Color(0xFF0F172A),
+    onSurface = Color(0xFF0F172A),
+    onSurfaceVariant = Color(0xFF475569),
+    outline = EmeraldBorder
 )
 
 @Composable
@@ -46,8 +43,8 @@ fun CineExploreTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
     content: @Composable () -> Unit
 ) {
-    // Utamakan tema gelap (Neo-Brutalism Dark)
-    val colorScheme = if (darkTheme) NeoDarkColorScheme else NeoDarkColorScheme
+    // Utamakan tema gelap Dark Emerald yang estetik
+    val colorScheme = if (darkTheme) EmeraldDarkColorScheme else EmeraldDarkColorScheme
 
     MaterialTheme(
         colorScheme = colorScheme,

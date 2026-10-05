@@ -2,7 +2,6 @@ package com.film.robiansyah.ui.screen
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -11,6 +10,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.CalendarToday
 import androidx.compose.material.icons.filled.ErrorOutline
+import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Movie
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.*
@@ -34,7 +34,7 @@ import com.film.robiansyah.ui.theme.*
 import com.film.robiansyah.ui.viewmodel.DetailUiState
 import com.film.robiansyah.ui.viewmodel.TvShowViewModel
 
-// STATEFUL COMPOSABLE (Menangani pengambilan data detail & navigasi kembali)
+// STATEFUL COMPOSABLE (Menangani data detail & navigasi kembali)
 @Composable
 fun DetailScreen(
     showId: Int,
@@ -50,16 +50,21 @@ fun DetailScreen(
     StatelessDetailScreen(
         uiState = detailUiState,
         onBackClick = { navController.popBackStack() },
+        onHomeClick = {
+            // Kembali ke Home Screen dengan aman
+            navController.popBackStack("home", inclusive = false)
+        },
         onRetry = { viewModel.loadShowDetail(showId) }
     )
 }
 
-// STATELESS COMPOSABLE (Tampilan Murni Neo-Brutalism Dark)
+// STATELESS COMPOSABLE (Tampilan Murni Dark Emerald Glassmorphic)
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @Composable
 fun StatelessDetailScreen(
     uiState: DetailUiState,
     onBackClick: () -> Unit,
+    onHomeClick: () -> Unit,
     onRetry: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -68,9 +73,9 @@ fun StatelessDetailScreen(
             TopAppBar(
                 title = {
                     Text(
-                        text = "DETAIL FILM",
-                        fontWeight = FontWeight.Black,
-                        letterSpacing = 1.sp
+                        text = "Detail Film",
+                        fontWeight = FontWeight.Bold,
+                        color = TextPrimary
                     )
                 },
                 navigationIcon = {
@@ -78,17 +83,27 @@ fun StatelessDetailScreen(
                         Icon(
                             imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                             contentDescription = "Kembali",
-                            tint = NeoLime
+                            tint = EmeraldPrimary
+                        )
+                    }
+                },
+                actions = {
+                    // Tombol Ikon Home di Pojok Kanan Atas
+                    IconButton(onClick = onHomeClick) {
+                        Icon(
+                            imageVector = Icons.Default.Home,
+                            contentDescription = "Ke Beranda",
+                            tint = EmeraldPrimary
                         )
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = NeoBackground,
-                    titleContentColor = NeoTextWhite
+                    containerColor = DarkBg,
+                    titleContentColor = TextPrimary
                 )
             )
         },
-        containerColor = NeoBackground,
+        containerColor = DarkBg,
         modifier = modifier
     ) { paddingValues ->
         Box(
@@ -104,15 +119,14 @@ fun StatelessDetailScreen(
                     ) {
                         Column(horizontalAlignment = Alignment.CenterHorizontally) {
                             CircularProgressIndicator(
-                                color = NeoLime,
+                                color = EmeraldPrimary,
                                 strokeWidth = 3.dp
                             )
-                            Spacer(modifier = Modifier.height(12.dp))
+                            Spacer(modifier = Modifier.height(14.dp))
                             Text(
-                                text = "Memuat detail film...",
+                                text = "Memuat detail film dari TVmaze...",
                                 style = MaterialTheme.typography.bodyMedium,
-                                color = NeoTextWhite,
-                                fontWeight = FontWeight.SemiBold
+                                color = TextSecondary
                             )
                         }
                     }
@@ -126,19 +140,18 @@ fun StatelessDetailScreen(
                         contentAlignment = Alignment.Center
                     ) {
                         Card(
-                            colors = CardDefaults.cardColors(containerColor = NeoSurface),
-                            border = BorderStroke(2.dp, NeoCoral),
-                            shape = RoundedCornerShape(8.dp),
-                            modifier = Modifier.padding(16.dp)
+                            colors = CardDefaults.cardColors(containerColor = DarkSurfaceCard),
+                            border = BorderStroke(1.dp, AccentRose.copy(alpha = 0.5f)),
+                            shape = RoundedCornerShape(16.dp)
                         ) {
                             Column(
                                 horizontalAlignment = Alignment.CenterHorizontally,
-                                modifier = Modifier.padding(24.dp)
+                                modifier = Modifier.padding(28.dp)
                             ) {
                                 Icon(
                                     imageVector = Icons.Default.ErrorOutline,
                                     contentDescription = "Error",
-                                    tint = NeoCoral,
+                                    tint = AccentRose,
                                     modifier = Modifier.size(56.dp)
                                 )
                                 Spacer(modifier = Modifier.height(12.dp))
@@ -146,23 +159,22 @@ fun StatelessDetailScreen(
                                     text = "Gagal Memuat Detail",
                                     style = MaterialTheme.typography.titleMedium,
                                     fontWeight = FontWeight.Bold,
-                                    color = NeoCoral
+                                    color = AccentRose
                                 )
                                 Spacer(modifier = Modifier.height(6.dp))
                                 Text(
                                     text = uiState.message,
                                     style = MaterialTheme.typography.bodyMedium,
-                                    color = NeoTextWhite
+                                    color = TextSecondary
                                 )
                                 Spacer(modifier = Modifier.height(16.dp))
                                 Button(
                                     onClick = onRetry,
                                     colors = ButtonDefaults.buttonColors(
-                                        containerColor = NeoLime,
+                                        containerColor = EmeraldPrimary,
                                         contentColor = Color.Black
                                     ),
-                                    shape = RoundedCornerShape(6.dp),
-                                    border = BorderStroke(2.dp, Color.Black)
+                                    shape = RoundedCornerShape(10.dp)
                                 ) {
                                     Text("Coba Lagi", fontWeight = FontWeight.Bold)
                                 }
@@ -181,14 +193,13 @@ fun StatelessDetailScreen(
                             .verticalScroll(scrollState)
                             .padding(16.dp)
                     ) {
-                        // Poster Besar Film dengan Border Tegas 2.dp khas Neo-Brutalism
+                        // Poster Besar Film dengan Sudut Membulat 16.dp & Border Emerald Halus
                         Box(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .height(300.dp)
-                                .clip(RoundedCornerShape(8.dp))
-                                .border(2.dp, NeoBorder, RoundedCornerShape(8.dp))
-                                .background(Color(0xFF141414)),
+                                .height(320.dp)
+                                .clip(RoundedCornerShape(16.dp))
+                                .background(Color(0xFF0F1A16)),
                             contentAlignment = Alignment.Center
                         ) {
                             val imageUrl = show.image?.original ?: show.image?.medium
@@ -204,7 +215,7 @@ fun StatelessDetailScreen(
                                 Icon(
                                     imageVector = Icons.Default.Movie,
                                     contentDescription = null,
-                                    tint = NeoLime,
+                                    tint = EmeraldPrimary.copy(alpha = 0.6f),
                                     modifier = Modifier.size(80.dp)
                                 )
                             }
@@ -216,97 +227,96 @@ fun StatelessDetailScreen(
                         Text(
                             text = show.name,
                             style = MaterialTheme.typography.headlineMedium,
-                            fontWeight = FontWeight.Black,
-                            color = NeoTextWhite
+                            fontWeight = FontWeight.Bold,
+                            color = TextPrimary
                         )
 
                         Spacer(modifier = Modifier.height(12.dp))
 
-                        // 2. Baris Badges Neo-Brutalism: Tahun Rilis, Rating, Status
+                        // 2. Baris Badges Colorful: Tahun Rilis (Cyan), Rating (Gold), Status (Emerald)
                         Row(
                             verticalAlignment = Alignment.CenterVertically,
                             horizontalArrangement = Arrangement.spacedBy(10.dp)
                         ) {
-                            // Badge Tahun Rilis (Warna Coral)
+                            // Badge Tahun Rilis (Cyan)
                             Surface(
-                                color = NeoCoral,
-                                shape = RoundedCornerShape(4.dp),
-                                border = BorderStroke(1.5.dp, Color.Black)
+                                color = Color(0x3338BDF8),
+                                shape = RoundedCornerShape(8.dp),
+                                border = BorderStroke(1.dp, AccentCyan.copy(alpha = 0.5f))
                             ) {
                                 Row(
                                     verticalAlignment = Alignment.CenterVertically,
-                                    modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp)
+                                    modifier = Modifier.padding(horizontal = 10.dp, vertical = 5.dp)
                                 ) {
                                     Icon(
                                         imageVector = Icons.Default.CalendarToday,
                                         contentDescription = "Tahun",
-                                        tint = Color.White,
+                                        tint = AccentCyan,
                                         modifier = Modifier.size(13.dp)
                                     )
-                                    Spacer(modifier = Modifier.width(4.dp))
+                                    Spacer(modifier = Modifier.width(5.dp))
                                     Text(
                                         text = show.releaseYear,
                                         style = MaterialTheme.typography.labelSmall,
-                                        fontWeight = FontWeight.Black,
-                                        color = Color.White
+                                        fontWeight = FontWeight.Bold,
+                                        color = AccentCyan
                                     )
                                 }
                             }
 
-                            // Badge Rating (Warna Lime)
+                            // Badge Rating Bintang Emas (Gold)
                             Surface(
-                                color = NeoLime,
-                                shape = RoundedCornerShape(4.dp),
-                                border = BorderStroke(1.5.dp, Color.Black)
+                                color = Color(0x33FBBF24),
+                                shape = RoundedCornerShape(8.dp),
+                                border = BorderStroke(1.dp, AccentGold.copy(alpha = 0.5f))
                             ) {
                                 Row(
                                     verticalAlignment = Alignment.CenterVertically,
-                                    modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp)
+                                    modifier = Modifier.padding(horizontal = 10.dp, vertical = 5.dp)
                                 ) {
                                     Icon(
                                         imageVector = Icons.Default.Star,
                                         contentDescription = "Rating",
-                                        tint = Color.Black,
+                                        tint = AccentGold,
                                         modifier = Modifier.size(14.dp)
                                     )
                                     Spacer(modifier = Modifier.width(4.dp))
                                     Text(
                                         text = "${show.ratingText} / 10",
                                         style = MaterialTheme.typography.labelSmall,
-                                        fontWeight = FontWeight.Black,
-                                        color = Color.Black
+                                        fontWeight = FontWeight.Bold,
+                                        color = AccentGold
                                     )
                                 }
                             }
 
-                            // Badge Status Tayang (Warna Cyan)
+                            // Badge Status Tayang (Emerald)
                             if (!show.status.isNullOrBlank()) {
                                 Surface(
-                                    color = NeoCyan,
-                                    shape = RoundedCornerShape(4.dp),
-                                    border = BorderStroke(1.5.dp, Color.Black)
+                                    color = Color(0x3310B981),
+                                    shape = RoundedCornerShape(8.dp),
+                                    border = BorderStroke(1.dp, EmeraldBorder)
                                 ) {
                                     Text(
                                         text = show.status,
                                         style = MaterialTheme.typography.labelSmall,
-                                        fontWeight = FontWeight.Black,
-                                        color = Color.Black,
-                                        modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp)
+                                        fontWeight = FontWeight.SemiBold,
+                                        color = EmeraldPrimary,
+                                        modifier = Modifier.padding(horizontal = 10.dp, vertical = 5.dp)
                                     )
                                 }
                             }
                         }
 
-                        Spacer(modifier = Modifier.height(16.dp))
+                        Spacer(modifier = Modifier.height(18.dp))
 
-                        // 3. Daftar Genre (Chips Neo-Brutalism)
+                        // 3. Daftar Genre (Chips Colorful)
                         if (!show.genres.isNullOrEmpty()) {
                             Text(
-                                text = "GENRE",
-                                style = MaterialTheme.typography.labelLarge,
-                                fontWeight = FontWeight.Bold,
-                                color = NeoLime,
-                                letterSpacing = 1.sp
+                                text = "Genre",
+                                style = MaterialTheme.typography.titleMedium,
+                                fontWeight = FontWeight.SemiBold,
+                                color = TextPrimary
                             )
 
                             Spacer(modifier = Modifier.height(8.dp))
@@ -317,42 +327,37 @@ fun StatelessDetailScreen(
                             ) {
                                 show.genres.forEach { genre ->
                                     Surface(
-                                        color = NeoSurfaceVariant,
-                                        shape = RoundedCornerShape(6.dp),
-                                        border = BorderStroke(1.5.dp, NeoBorder)
+                                        color = DarkSurfaceCard,
+                                        shape = RoundedCornerShape(10.dp),
+                                        border = BorderStroke(1.dp, EmeraldBorder)
                                     ) {
                                         Text(
                                             text = genre,
                                             style = MaterialTheme.typography.labelMedium,
-                                            fontWeight = FontWeight.SemiBold,
-                                            color = NeoTextWhite,
-                                            modifier = Modifier.padding(horizontal = 10.dp, vertical = 5.dp)
+                                            fontWeight = FontWeight.Medium,
+                                            color = AccentPurple, // Aksen ungu pastel yang harmonis
+                                            modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp)
                                         )
                                     }
                                 }
                             }
 
-                            Spacer(modifier = Modifier.height(16.dp))
+                            Spacer(modifier = Modifier.height(18.dp))
                         }
 
-                        HorizontalDivider(thickness = 2.dp, color = NeoBorder)
-
-                        Spacer(modifier = Modifier.height(16.dp))
-
-                        // 4. Ringkasan atau Deskripsi Film (Summary) di dalam Card
+                        // 4. Ringkasan atau Deskripsi Film (Sinopsis Card Glassmorphic)
                         Card(
-                            colors = CardDefaults.cardColors(containerColor = NeoSurface),
-                            shape = RoundedCornerShape(8.dp),
-                            border = BorderStroke(2.dp, NeoBorder),
+                            colors = CardDefaults.cardColors(containerColor = DarkSurfaceCard),
+                            shape = RoundedCornerShape(16.dp),
+                            border = BorderStroke(1.dp, EmeraldBorder),
                             modifier = Modifier.fillMaxWidth()
                         ) {
-                            Column(modifier = Modifier.padding(16.dp)) {
+                            Column(modifier = Modifier.padding(18.dp)) {
                                 Text(
-                                    text = "SINOPSIS",
+                                    text = "Sinopsis Lengkap",
                                     style = MaterialTheme.typography.titleMedium,
-                                    fontWeight = FontWeight.Black,
-                                    color = NeoLime,
-                                    letterSpacing = 1.sp
+                                    fontWeight = FontWeight.Bold,
+                                    color = EmeraldPrimary
                                 )
 
                                 Spacer(modifier = Modifier.height(8.dp))
@@ -360,13 +365,13 @@ fun StatelessDetailScreen(
                                 Text(
                                     text = show.cleanSummary,
                                     style = MaterialTheme.typography.bodyMedium,
-                                    color = NeoTextWhite,
+                                    color = TextPrimary.copy(alpha = 0.9f),
                                     lineHeight = 22.sp
                                 )
                             }
                         }
 
-                        Spacer(modifier = Modifier.height(24.dp))
+                        Spacer(modifier = Modifier.height(28.dp))
                     }
                 }
             }
