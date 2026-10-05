@@ -1,5 +1,6 @@
 package com.film.robiansyah.ui.components
 
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -11,9 +12,15 @@ import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
+import com.film.robiansyah.ui.theme.NeoBorder
+import com.film.robiansyah.ui.theme.NeoLime
+import com.film.robiansyah.ui.theme.NeoSurface
+import com.film.robiansyah.ui.theme.NeoTextWhite
 
 @Composable
 fun CineSearchBar(
@@ -28,12 +35,17 @@ fun CineSearchBar(
     OutlinedTextField(
         value = query,
         onValueChange = onQueryChange,
-        placeholder = { Text("Cari judul film atau serial TV...") },
+        placeholder = {
+            Text(
+                text = "Cari judul film atau serial TV...",
+                color = Color.Gray
+            )
+        },
         leadingIcon = {
             Icon(
                 imageVector = Icons.Default.Search,
                 contentDescription = "Search Icon",
-                tint = MaterialTheme.colorScheme.primary
+                tint = NeoLime // Aksen kuning-hijau elektrik khas Neo-Brutalism
             )
         },
         trailingIcon = {
@@ -44,13 +56,14 @@ fun CineSearchBar(
                 }) {
                     Icon(
                         imageVector = Icons.Default.Clear,
-                        contentDescription = "Hapus Pencarian"
+                        contentDescription = "Hapus Pencarian",
+                        tint = Color.White
                     )
                 }
             }
         },
         singleLine = true,
-        shape = RoundedCornerShape(24.dp),
+        shape = RoundedCornerShape(8.dp), // Sudut tegas khas Neo-Brutalism
         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
         keyboardActions = KeyboardActions(
             onSearch = {
@@ -59,13 +72,16 @@ fun CineSearchBar(
             }
         ),
         colors = OutlinedTextFieldDefaults.colors(
-            focusedBorderColor = MaterialTheme.colorScheme.primary,
-            unfocusedBorderColor = MaterialTheme.colorScheme.outlineVariant,
-            focusedContainerColor = MaterialTheme.colorScheme.surface,
-            unfocusedContainerColor = MaterialTheme.colorScheme.surface
+            focusedBorderColor = NeoLime,
+            unfocusedBorderColor = NeoBorder,
+            focusedContainerColor = NeoSurface,
+            unfocusedContainerColor = NeoSurface,
+            focusedTextColor = NeoTextWhite,
+            unfocusedTextColor = NeoTextWhite
         ),
         modifier = modifier
             .fillMaxWidth()
             .padding(horizontal = 16.dp, vertical = 8.dp)
+            .border(2.dp, NeoBorder, RoundedCornerShape(8.dp)) // Border tegas 2.dp
     )
 }

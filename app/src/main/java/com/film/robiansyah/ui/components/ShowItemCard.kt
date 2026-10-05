@@ -1,6 +1,8 @@
 package com.film.robiansyah.ui.components
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -12,7 +14,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
@@ -21,8 +22,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.film.robiansyah.data.model.Show
-import com.film.robiansyah.ui.theme.CinemaGold
-import com.film.robiansyah.ui.theme.CinemaRed
+import com.film.robiansyah.ui.theme.*
 
 @Composable
 fun ShowItemCard(
@@ -33,21 +33,21 @@ fun ShowItemCard(
     Card(
         modifier = modifier
             .fillMaxWidth()
-            .clip(RoundedCornerShape(12.dp))
+            .clip(RoundedCornerShape(8.dp))
             .clickable(onClick = onClick),
-        shape = RoundedCornerShape(12.dp),
+        shape = RoundedCornerShape(8.dp),
+        border = BorderStroke(2.dp, NeoBorder), // Border tegas 2.dp khas Neo-Brutalism
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surfaceVariant
-        ),
-        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
+            containerColor = NeoSurface
+        )
     ) {
         Column(modifier = Modifier.fillMaxWidth()) {
             // Container Gambar Poster Film / Placeholder
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(200.dp)
-                    .background(Color(0xFF1E1E1E)),
+                    .height(210.dp)
+                    .background(Color(0xFF141414)),
                 contentAlignment = Alignment.Center
             ) {
                 val imageUrl = show.image?.medium ?: show.image?.original
@@ -60,7 +60,7 @@ fun ShowItemCard(
                         modifier = Modifier.fillMaxSize()
                     )
                 } else {
-                    // Fallback visual jika API tidak menyediakan gambar poster
+                    // Placeholder jika gambar tidak tersedia
                     Column(
                         horizontalAlignment = Alignment.CenterHorizontally,
                         verticalArrangement = Arrangement.Center,
@@ -69,76 +69,72 @@ fun ShowItemCard(
                         Icon(
                             imageVector = Icons.Default.Movie,
                             contentDescription = "Movie Placeholder",
-                            tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f),
-                            modifier = Modifier.size(48.dp)
+                            tint = NeoLime,
+                            modifier = Modifier.size(44.dp)
                         )
                         Spacer(modifier = Modifier.height(8.dp))
                         Text(
                             text = show.name,
                             style = MaterialTheme.typography.bodySmall,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f),
+                            color = NeoTextMuted,
                             maxLines = 2,
                             overflow = TextOverflow.Ellipsis
                         )
                     }
                 }
 
-                // Gradient bayangan di bagian bawah poster agar teks terbaca jelas
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(60.dp)
-                        .align(Alignment.BottomCenter)
-                        .background(
-                            Brush.verticalGradient(
-                                colors = listOf(Color.Transparent, Color(0xCC000000))
-                            )
-                        )
-                )
-
-                // Badge Rating di Pojok Kiri Atas
+                // Badge Rating (Pojok Kiri Atas) - Gaya Neo-Brutalism Kontras Tinggi
                 Surface(
-                    color = Color(0xCC000000),
-                    shape = RoundedCornerShape(topStart = 0.dp, bottomEnd = 8.dp),
-                    modifier = Modifier.align(Alignment.TopStart)
+                    color = NeoLime,
+                    shape = RoundedCornerShape(4.dp),
+                    border = BorderStroke(1.5.dp, Color.Black),
+                    modifier = Modifier
+                        .align(Alignment.TopStart)
+                        .padding(8.dp)
                 ) {
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
-                        modifier = Modifier.padding(horizontal = 6.dp, vertical = 3.dp)
+                        modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp)
                     ) {
                         Icon(
                             imageVector = Icons.Default.Star,
                             contentDescription = "Rating",
-                            tint = CinemaGold,
-                            modifier = Modifier.size(12.dp)
+                            tint = Color.Black,
+                            modifier = Modifier.size(13.dp)
                         )
                         Spacer(modifier = Modifier.width(3.dp))
                         Text(
                             text = show.ratingText,
                             style = MaterialTheme.typography.labelSmall.copy(fontSize = 11.sp),
-                            fontWeight = FontWeight.Bold,
-                            color = Color.White
+                            fontWeight = FontWeight.Black,
+                            color = Color.Black
                         )
                     }
                 }
 
-                // Badge Tahun Rilis di Pojok Kanan Atas
+                // Badge Tahun Rilis (Pojok Kanan Atas)
                 Surface(
-                    color = CinemaRed,
-                    shape = RoundedCornerShape(bottomStart = 8.dp),
-                    modifier = Modifier.align(Alignment.TopEnd)
+                    color = NeoCoral,
+                    shape = RoundedCornerShape(4.dp),
+                    border = BorderStroke(1.5.dp, Color.Black),
+                    modifier = Modifier
+                        .align(Alignment.TopEnd)
+                        .padding(8.dp)
                 ) {
                     Text(
                         text = show.releaseYear,
                         style = MaterialTheme.typography.labelSmall.copy(fontSize = 11.sp),
-                        fontWeight = FontWeight.Bold,
+                        fontWeight = FontWeight.Black,
                         color = Color.White,
-                        modifier = Modifier.padding(horizontal = 6.dp, vertical = 3.dp)
+                        modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp)
                     )
                 }
             }
 
-            // Informasi Judul & Genre
+            // Garis pembatas antara gambar dan teks
+            HorizontalDivider(thickness = 2.dp, color = NeoBorder)
+
+            // Informasi Judul & Genre Film
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -148,16 +144,18 @@ fun ShowItemCard(
                     text = show.name,
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.Bold,
+                    color = NeoTextWhite,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis
                 )
 
-                Spacer(modifier = Modifier.height(2.dp))
+                Spacer(modifier = Modifier.height(4.dp))
 
                 Text(
                     text = show.genresText,
                     style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    color = NeoCyan, // Aksen Cyan terang agar genre langsung terbaca
+                    fontWeight = FontWeight.Medium,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis
                 )

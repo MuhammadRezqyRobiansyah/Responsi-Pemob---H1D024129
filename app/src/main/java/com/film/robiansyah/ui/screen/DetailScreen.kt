@@ -1,6 +1,8 @@
 package com.film.robiansyah.ui.screen
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -19,7 +21,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
@@ -29,8 +30,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.film.robiansyah.data.model.Show
-import com.film.robiansyah.ui.theme.CinemaGold
-import com.film.robiansyah.ui.theme.CinemaRed
+import com.film.robiansyah.ui.theme.*
 import com.film.robiansyah.ui.viewmodel.DetailUiState
 import com.film.robiansyah.ui.viewmodel.TvShowViewModel
 
@@ -54,7 +54,7 @@ fun DetailScreen(
     )
 }
 
-// STATELESS COMPOSABLE (Tampilan murni UI, mudah dipratinjau & di-test)
+// STATELESS COMPOSABLE (Tampilan Murni Neo-Brutalism Dark)
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @Composable
 fun StatelessDetailScreen(
@@ -66,22 +66,29 @@ fun StatelessDetailScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Detail Film") },
+                title = {
+                    Text(
+                        text = "DETAIL FILM",
+                        fontWeight = FontWeight.Black,
+                        letterSpacing = 1.sp
+                    )
+                },
                 navigationIcon = {
                     IconButton(onClick = onBackClick) {
                         Icon(
                             imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                            contentDescription = "Kembali"
+                            contentDescription = "Kembali",
+                            tint = NeoLime
                         )
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.surface,
-                    titleContentColor = MaterialTheme.colorScheme.onSurface,
-                    navigationIconContentColor = MaterialTheme.colorScheme.onSurface
+                    containerColor = NeoBackground,
+                    titleContentColor = NeoTextWhite
                 )
             )
         },
+        containerColor = NeoBackground,
         modifier = modifier
     ) { paddingValues ->
         Box(
@@ -96,12 +103,16 @@ fun StatelessDetailScreen(
                         contentAlignment = Alignment.Center
                     ) {
                         Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                            CircularProgressIndicator(color = MaterialTheme.colorScheme.primary)
+                            CircularProgressIndicator(
+                                color = NeoLime,
+                                strokeWidth = 3.dp
+                            )
                             Spacer(modifier = Modifier.height(12.dp))
                             Text(
                                 text = "Memuat detail film...",
                                 style = MaterialTheme.typography.bodyMedium,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                                color = NeoTextWhite,
+                                fontWeight = FontWeight.SemiBold
                             )
                         }
                     }
@@ -114,29 +125,47 @@ fun StatelessDetailScreen(
                             .padding(24.dp),
                         contentAlignment = Alignment.Center
                     ) {
-                        Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                            Icon(
-                                imageVector = Icons.Default.ErrorOutline,
-                                contentDescription = "Error",
-                                tint = MaterialTheme.colorScheme.error,
-                                modifier = Modifier.size(64.dp)
-                            )
-                            Spacer(modifier = Modifier.height(16.dp))
-                            Text(
-                                text = "Gagal Memuat Detail",
-                                style = MaterialTheme.typography.titleMedium,
-                                fontWeight = FontWeight.Bold,
-                                color = MaterialTheme.colorScheme.error
-                            )
-                            Spacer(modifier = Modifier.height(8.dp))
-                            Text(
-                                text = uiState.message,
-                                style = MaterialTheme.typography.bodyMedium,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant
-                            )
-                            Spacer(modifier = Modifier.height(16.dp))
-                            Button(onClick = onRetry) {
-                                Text("Coba Lagi")
+                        Card(
+                            colors = CardDefaults.cardColors(containerColor = NeoSurface),
+                            border = BorderStroke(2.dp, NeoCoral),
+                            shape = RoundedCornerShape(8.dp),
+                            modifier = Modifier.padding(16.dp)
+                        ) {
+                            Column(
+                                horizontalAlignment = Alignment.CenterHorizontally,
+                                modifier = Modifier.padding(24.dp)
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Default.ErrorOutline,
+                                    contentDescription = "Error",
+                                    tint = NeoCoral,
+                                    modifier = Modifier.size(56.dp)
+                                )
+                                Spacer(modifier = Modifier.height(12.dp))
+                                Text(
+                                    text = "Gagal Memuat Detail",
+                                    style = MaterialTheme.typography.titleMedium,
+                                    fontWeight = FontWeight.Bold,
+                                    color = NeoCoral
+                                )
+                                Spacer(modifier = Modifier.height(6.dp))
+                                Text(
+                                    text = uiState.message,
+                                    style = MaterialTheme.typography.bodyMedium,
+                                    color = NeoTextWhite
+                                )
+                                Spacer(modifier = Modifier.height(16.dp))
+                                Button(
+                                    onClick = onRetry,
+                                    colors = ButtonDefaults.buttonColors(
+                                        containerColor = NeoLime,
+                                        contentColor = Color.Black
+                                    ),
+                                    shape = RoundedCornerShape(6.dp),
+                                    border = BorderStroke(2.dp, Color.Black)
+                                ) {
+                                    Text("Coba Lagi", fontWeight = FontWeight.Bold)
+                                }
                             }
                         }
                     }
@@ -150,12 +179,15 @@ fun StatelessDetailScreen(
                         modifier = Modifier
                             .fillMaxSize()
                             .verticalScroll(scrollState)
+                            .padding(16.dp)
                     ) {
-                        // Header Poster & Backdrop Visual
+                        // Poster Besar Film dengan Border Tegas 2.dp khas Neo-Brutalism
                         Box(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .height(280.dp)
+                                .height(300.dp)
+                                .clip(RoundedCornerShape(8.dp))
+                                .border(2.dp, NeoBorder, RoundedCornerShape(8.dp))
                                 .background(Color(0xFF141414)),
                             contentAlignment = Alignment.Center
                         ) {
@@ -172,167 +204,169 @@ fun StatelessDetailScreen(
                                 Icon(
                                     imageVector = Icons.Default.Movie,
                                     contentDescription = null,
-                                    tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.4f),
+                                    tint = NeoLime,
                                     modifier = Modifier.size(80.dp)
                                 )
                             }
-
-                            // Gradient Overlay di bagian bawah backdrop
-                            Box(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .height(100.dp)
-                                    .align(Alignment.BottomCenter)
-                                    .background(
-                                        Brush.verticalGradient(
-                                            colors = listOf(Color.Transparent, MaterialTheme.colorScheme.background)
-                                        )
-                                    )
-                            )
                         }
 
-                        // Bagian Informasi Detail Konten
-                        Column(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(16.dp)
+                        Spacer(modifier = Modifier.height(16.dp))
+
+                        // 1. Judul Film
+                        Text(
+                            text = show.name,
+                            style = MaterialTheme.typography.headlineMedium,
+                            fontWeight = FontWeight.Black,
+                            color = NeoTextWhite
+                        )
+
+                        Spacer(modifier = Modifier.height(12.dp))
+
+                        // 2. Baris Badges Neo-Brutalism: Tahun Rilis, Rating, Status
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.spacedBy(10.dp)
                         ) {
-                            // 1. Judul Film
-                            Text(
-                                text = show.name,
-                                style = MaterialTheme.typography.headlineMedium,
-                                fontWeight = FontWeight.Bold,
-                                color = MaterialTheme.colorScheme.onBackground
-                            )
-
-                            Spacer(modifier = Modifier.height(12.dp))
-
-                            // 2. Baris Badges: Tahun Rilis, Rating, Status
-                            Row(
-                                verticalAlignment = Alignment.CenterVertically,
-                                horizontalArrangement = Arrangement.spacedBy(8.dp)
+                            // Badge Tahun Rilis (Warna Coral)
+                            Surface(
+                                color = NeoCoral,
+                                shape = RoundedCornerShape(4.dp),
+                                border = BorderStroke(1.5.dp, Color.Black)
                             ) {
-                                // Badge Tahun Rilis
-                                Surface(
-                                    color = CinemaRed,
-                                    shape = RoundedCornerShape(6.dp)
+                                Row(
+                                    verticalAlignment = Alignment.CenterVertically,
+                                    modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp)
                                 ) {
-                                    Row(
-                                        verticalAlignment = Alignment.CenterVertically,
-                                        modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp)
-                                    ) {
-                                        Icon(
-                                            imageVector = Icons.Default.CalendarToday,
-                                            contentDescription = "Tahun",
-                                            tint = Color.White,
-                                            modifier = Modifier.size(13.dp)
-                                        )
-                                        Spacer(modifier = Modifier.width(4.dp))
-                                        Text(
-                                            text = show.releaseYear,
-                                            style = MaterialTheme.typography.labelSmall,
-                                            fontWeight = FontWeight.Bold,
-                                            color = Color.White
-                                        )
-                                    }
-                                }
-
-                                // Badge Rating
-                                Surface(
-                                    color = Color(0xFF2C2C2C),
-                                    shape = RoundedCornerShape(6.dp)
-                                ) {
-                                    Row(
-                                        verticalAlignment = Alignment.CenterVertically,
-                                        modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp)
-                                    ) {
-                                        Icon(
-                                            imageVector = Icons.Default.Star,
-                                            contentDescription = "Rating",
-                                            tint = CinemaGold,
-                                            modifier = Modifier.size(14.dp)
-                                        )
-                                        Spacer(modifier = Modifier.width(4.dp))
-                                        Text(
-                                            text = "${show.ratingText} / 10",
-                                            style = MaterialTheme.typography.labelSmall,
-                                            fontWeight = FontWeight.Bold,
-                                            color = Color.White
-                                        )
-                                    }
-                                }
-
-                                // Badge Status (jika ada)
-                                if (!show.status.isNullOrBlank()) {
-                                    Surface(
-                                        color = MaterialTheme.colorScheme.secondaryContainer,
-                                        shape = RoundedCornerShape(6.dp)
-                                    ) {
-                                        Text(
-                                            text = show.status,
-                                            style = MaterialTheme.typography.labelSmall,
-                                            color = MaterialTheme.colorScheme.onSecondaryContainer,
-                                            modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp)
-                                        )
-                                    }
+                                    Icon(
+                                        imageVector = Icons.Default.CalendarToday,
+                                        contentDescription = "Tahun",
+                                        tint = Color.White,
+                                        modifier = Modifier.size(13.dp)
+                                    )
+                                    Spacer(modifier = Modifier.width(4.dp))
+                                    Text(
+                                        text = show.releaseYear,
+                                        style = MaterialTheme.typography.labelSmall,
+                                        fontWeight = FontWeight.Black,
+                                        color = Color.White
+                                    )
                                 }
                             }
 
-                            Spacer(modifier = Modifier.height(16.dp))
-
-                            // 3. Daftar Genre (Chips)
-                            if (!show.genres.isNullOrEmpty()) {
-                                Text(
-                                    text = "Genre",
-                                    style = MaterialTheme.typography.titleMedium,
-                                    fontWeight = FontWeight.SemiBold
-                                )
-
-                                Spacer(modifier = Modifier.height(6.dp))
-
-                                FlowRow(
-                                    horizontalArrangement = Arrangement.spacedBy(8.dp),
-                                    verticalArrangement = Arrangement.spacedBy(8.dp)
+                            // Badge Rating (Warna Lime)
+                            Surface(
+                                color = NeoLime,
+                                shape = RoundedCornerShape(4.dp),
+                                border = BorderStroke(1.5.dp, Color.Black)
+                            ) {
+                                Row(
+                                    verticalAlignment = Alignment.CenterVertically,
+                                    modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp)
                                 ) {
-                                    show.genres.forEach { genre ->
-                                        SuggestionChip(
-                                            onClick = { },
-                                            label = {
-                                                Text(
-                                                    text = genre,
-                                                    style = MaterialTheme.typography.labelMedium
-                                                )
-                                            },
-                                            shape = RoundedCornerShape(8.dp)
-                                        )
-                                    }
+                                    Icon(
+                                        imageVector = Icons.Default.Star,
+                                        contentDescription = "Rating",
+                                        tint = Color.Black,
+                                        modifier = Modifier.size(14.dp)
+                                    )
+                                    Spacer(modifier = Modifier.width(4.dp))
+                                    Text(
+                                        text = "${show.ratingText} / 10",
+                                        style = MaterialTheme.typography.labelSmall,
+                                        fontWeight = FontWeight.Black,
+                                        color = Color.Black
+                                    )
                                 }
-
-                                Spacer(modifier = Modifier.height(16.dp))
                             }
 
-                            HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
+                            // Badge Status Tayang (Warna Cyan)
+                            if (!show.status.isNullOrBlank()) {
+                                Surface(
+                                    color = NeoCyan,
+                                    shape = RoundedCornerShape(4.dp),
+                                    border = BorderStroke(1.5.dp, Color.Black)
+                                ) {
+                                    Text(
+                                        text = show.status,
+                                        style = MaterialTheme.typography.labelSmall,
+                                        fontWeight = FontWeight.Black,
+                                        color = Color.Black,
+                                        modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp)
+                                    )
+                                }
+                            }
+                        }
 
-                            Spacer(modifier = Modifier.height(16.dp))
+                        Spacer(modifier = Modifier.height(16.dp))
 
-                            // 4. Ringkasan atau Deskripsi Film (Summary)
+                        // 3. Daftar Genre (Chips Neo-Brutalism)
+                        if (!show.genres.isNullOrEmpty()) {
                             Text(
-                                text = "Ringkasan / Sinopsis",
-                                style = MaterialTheme.typography.titleMedium,
-                                fontWeight = FontWeight.Bold
+                                text = "GENRE",
+                                style = MaterialTheme.typography.labelLarge,
+                                fontWeight = FontWeight.Bold,
+                                color = NeoLime,
+                                letterSpacing = 1.sp
                             )
 
                             Spacer(modifier = Modifier.height(8.dp))
 
-                            Text(
-                                text = show.cleanSummary,
-                                style = MaterialTheme.typography.bodyLarge,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                                lineHeight = 22.sp
-                            )
+                            FlowRow(
+                                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                                verticalArrangement = Arrangement.spacedBy(8.dp)
+                            ) {
+                                show.genres.forEach { genre ->
+                                    Surface(
+                                        color = NeoSurfaceVariant,
+                                        shape = RoundedCornerShape(6.dp),
+                                        border = BorderStroke(1.5.dp, NeoBorder)
+                                    ) {
+                                        Text(
+                                            text = genre,
+                                            style = MaterialTheme.typography.labelMedium,
+                                            fontWeight = FontWeight.SemiBold,
+                                            color = NeoTextWhite,
+                                            modifier = Modifier.padding(horizontal = 10.dp, vertical = 5.dp)
+                                        )
+                                    }
+                                }
+                            }
 
-                            Spacer(modifier = Modifier.height(24.dp))
+                            Spacer(modifier = Modifier.height(16.dp))
                         }
+
+                        HorizontalDivider(thickness = 2.dp, color = NeoBorder)
+
+                        Spacer(modifier = Modifier.height(16.dp))
+
+                        // 4. Ringkasan atau Deskripsi Film (Summary) di dalam Card
+                        Card(
+                            colors = CardDefaults.cardColors(containerColor = NeoSurface),
+                            shape = RoundedCornerShape(8.dp),
+                            border = BorderStroke(2.dp, NeoBorder),
+                            modifier = Modifier.fillMaxWidth()
+                        ) {
+                            Column(modifier = Modifier.padding(16.dp)) {
+                                Text(
+                                    text = "SINOPSIS",
+                                    style = MaterialTheme.typography.titleMedium,
+                                    fontWeight = FontWeight.Black,
+                                    color = NeoLime,
+                                    letterSpacing = 1.sp
+                                )
+
+                                Spacer(modifier = Modifier.height(8.dp))
+
+                                Text(
+                                    text = show.cleanSummary,
+                                    style = MaterialTheme.typography.bodyMedium,
+                                    color = NeoTextWhite,
+                                    lineHeight = 22.sp
+                                )
+                            }
+                        }
+
+                        Spacer(modifier = Modifier.height(24.dp))
                     }
                 }
             }
